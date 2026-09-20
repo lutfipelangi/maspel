@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASPEL | Creative Business Automator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --neon-cyan: #00f3ff;
+            --neon-purple: #bc13fe;
+            --bg-dark: #050505;
+            --card-bg: rgba(10, 15, 10, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #e0e0e0;
+            font-family: 'Fira Code', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Matrix Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        /* CRT Scanline Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.3) 50%,
+                rgba(0,0,0,0.3)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 20;
+            animation: scanlineMove 10s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        /* 3D Scene Container */
+        .scene {
+            perspective: 1200px;
+            z-index: 10;
+            padding: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* 3D Holographic Card */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--neon-green);
+            border-radius: 12px;
+            padding: 2.5rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 65, 0.15),
+                inset 0 0 30px rgba(0, 255, 65, 0.05);
+            backdrop-filter: blur(8px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-cyan), var(--neon-purple));
+            z-index: -1;
+            border-radius: 14px;
+            opacity: 0.5;
+            filter: blur(10px);
+        }
+
+        /* Floating 3D Elements inside Card */
+        .card-content {
+            transform: translateZ(40px);
+        }
+
+        .terminal-prompt {
+            color: var(--neon-cyan);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .terminal-prompt::before {
+            content: 'maspel@system:~$ ';
+            color: var(--neon-green);
+        }
+
+        /* Glitch Title */
+        .glitch-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 4px;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px var(--neon-cyan), -2px -2px var(--neon-purple);
+            animation: glitch 3s infinite alternate-reverse;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { text-shadow: 2px 2px var(--neon-cyan), -2px -2px var(--neon-purple); transform: translate(0); }
+            92% { text-shadow: -2px 2px var(--neon-cyan), 2px -2px var(--neon-purple); transform: translate(-2px, 1px); }
+            94% { text-shadow: 2px -2px var(--neon-cyan), -2px 2px var(--neon-purple); transform: translate(2px, -1px); }
+            96% { text-shadow: -2px -2px var(--neon-cyan), 2px 2px var(--neon-purple); transform: translate(-1px, 2px); }
+            98% { text-shadow: 2px 2px var(--neon-cyan), -2px -2px var(--neon-purple); transform: translate(1px, -2px); }
+        }
+
+        .subtitle {
+            color: var(--neon-cyan);
+            font-size: 1rem;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            padding-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            opacity: 0; /* Hidden initially for typing effect */
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h2 {
+            color: var(--neon-green);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2::before {
+            content: '>';
+            color: var(--neon-purple);
+            font-weight: bold;
+        }
+
+        .section p {
+            color: #b0b0b0;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        .highlight {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Blinking Cursor */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: var(--neon-green);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glitch-title { font-size: 2.5rem; }
+            .card { padding: 1.5rem; }
+            .scene { perspective: 800px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="scene">
+        <div class="card" id="tilt-card">
+            <div class="card-content">
+                <div class="terminal-prompt">initiating_profile_load.exe</div>
+                
+                <h1 class="glitch-title">MASPEL</h1>
+                <div class="subtitle">BUSINESS OWNER | MUSIC CREATOR | AI STRATEGIST</div>
+
+                <div class="section" id="section-1">
+                    <h2>Creative Business Automator</h2>
+                </div>
+
+                <div class="section" id="section-2">
+                    <h2>BUY BACK TIME</h2>
+                    <p>Time is the ultimate currency. I <span class="highlight">engineer the systems</span> that reclaim yours, turning complex business operations into high-margin automated pipelines.</p>
+                </div>
+
+                <div class="section" id="section-3">
+                    <h2>BUSINESS OWNER</h2>
+                    <p>15 years of industry experience. I translate the complexities of high-volume printing and souvenir logistics into streamlined, premium, and <span class="highlight">automated digital business models</span>.</p>
+                </div>
+
+                <div class="section" id="section-4">
+                    <h2>AI STRATEGIST</h2>
+                    <p>Building for the future. I leverage cutting-edge AI and automation frameworks to create scalable products. From intelligent business logic to content pipelines, I make <span class="highlight">technology work for you</span>.<span class="cursor"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. MATRIX RAIN EFFECT ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const nums = '01';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff41'; // Matrix green
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                
+                // Randomly color some characters cyan or purple for "vibe"
+                if (Math.random() > 0.98) ctx.fillStyle = '#00f3ff';
+                else if (Math.random() > 0.99) ctx.fillStyle = '#bc13fe';
+                else ctx.fillStyle = '#00ff41';
+
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // --- 2. 3D TILT EFFECT ---
+        const card = document.getElementById('tilt-card');
+        const scene = document.querySelector('.scene');
+
+        scene.addEventListener('mousemove', (e) => {
+            const rect = scene.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -8; // Max 8 deg rotation
+            const rotateY = ((x - centerX) / centerX) * 8;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        scene.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+
+        // --- 3. TYPING / REVEAL EFFECT ---
+        const sections = document.querySelectorAll('.section');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Initial reveal delay for dramatic effect
+        setTimeout(() => {
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('visible');
+                }, index * 400); // Staggered reveal
+            });
+        }, 500);
+
+    </script>
+</body>
+</html>
