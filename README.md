@@ -37,7 +37,7 @@ An open-source SaaS website template built with Astro 6 and Tailwind CSS v4. Des
 
 ![preview](/docs/screenshot.jpeg)
 
-![Chinese version preview](/docs/ricoui-saas-zh.jpeg)
+
 
 ![Astro](https://img.shields.io/badge/Astro-6.4.2-FF5D01?logo=astro&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-7.3.3-646CFF?logo=vite&logoColor=white)
