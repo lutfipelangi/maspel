@@ -1,4 +1,35 @@
-# Maspel — Business Automator
+# Maspel — Personal Website & Digital Portfolio
+
+Welcome to the official repository of **Maspel's** personal website. This project serves as a digital portfolio and a central hub for my professional journey in web development, business automation, and digital solutions.
+
+## 🌐 Live Website
+You can visit the live website here: **[maspel.my.id](https://maspel.my.id)**
+
+## 🎯 Purpose & Function
+
+This website was built with a clear vision. Here is how it functions:
+
+*   **Digital Portfolio:** A dedicated space to showcase my latest projects, experiments, and professional works.
+*   **Business Automation Hub:** Displaying my core focus on engineering systems that reclaim time and turn complex business operations into high-margin automated pipelines.
+*   **Personal Branding:** A modern, fast, and accessible platform to present my skills, services, and thought processes to potential clients, employers, and the tech community.
+*   **Contact & Networking:** Providing an easy and direct way for visitors to reach out for collaborations, inquiries, or just to say hello.
+
+## 🚀 Tech Stack
+
+This website is built using modern, high-performance technologies to ensure the best user experience:
+
+*   **Framework:** [Astro](https://astro.build/) (for lightning-fast static site generation)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) (for modern, responsive, and utility-first design)
+*   **Deployment & Hosting:** [Cloudflare Pages](https://pages.cloudflare.com/) (for global edge network delivery)
+*   **Design System:** Customized from a modern SaaS template, tailored specifically for Maspel's brand identity.
+
+## 🛠️ Development
+
+If you are a developer and want to run this project locally:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/lutfipelangi/maspel.git
 
 > [中文文档](README-zh.md) | English
 
