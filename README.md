@@ -1,4 +1,4 @@
-# RicoFast — A design-led SaaS template for Astro
+# Maspel — Business Automator
 
 > [中文文档](README-zh.md) | English
 
@@ -13,15 +13,7 @@ An open-source SaaS website template built with Astro 6 and Tailwind CSS v4. Des
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.14-38B2AC?logo=tailwind-css&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-**Links:** [Live Demo](https://ricofast.pages.dev/) · [GitHub](https://github.com/ricocc/ricoui-saas-template) · [Changelog](https://ricofast.pages.dev/changelog) · [Design Reference](https://ricofast.pages.dev/elements)
 
-**Chinese Version:** branch `template-zh` · [Preview](https://ricoui-saas-zh.netlify.app/)
-
----
-
-## Why RicoFast
-
-Most open-source SaaS templates fall into two camps: bare starters that leave you rebuilding everything, or maximalist bundles that prioritize feature coverage over design quality. RicoFast focuses on design and visual polish — a documented design system that AI tools can accurately interpret, helping you produce pages with great visual and design quality.
 
 ## Features
 
@@ -199,43 +191,10 @@ The build is static. Any static host works:
 - [`docs/plan/`](docs/plan/) — Per-page detailed specs
 - [`CLAUDE.md`](CLAUDE.md) — Working context for AI coding assistants
 
-## Contributing
-
-Contributions are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines on bug reports, feature requests, and pull requests.
-
-## License
-
-[MIT](LICENSE) — fork it, ship with it, sell what you build on top of it. No attribution required.
-
-## Other templates
-
-- **Blog Template** — open source: [https://github.com/ricocc/public-portfolio-site](https://github.com/ricocc/public-portfolio-site)
-
-- **Portfolio Template** — open source: [https://github.com/ricocc/ricoui-portfolio](https://github.com/ricocc/ricoui-portfolio)
-
----
-
-## About the author
-
-I'm Rico, a web/UI designer passionate about creating interesting and creative work. With UI/UX design experience, currently focused on web design, visual implementation, and development projects.
-
-Feel free to add my WeChat and connect:
-
-<img src="https://ricoui.com/assets/wechat.png" alt="ricocc-wechat" width="280" />
-
-I post updates on my blog [Rico's Blog](https://ricoui.com/). You can also follow me on [Xiaohongshu @Rico的设计漫想](https://www.xiaohongshu.com/user/profile/5f2b6903000000000101f51f) and [X @ricouii](https://x.com/ricouii).
-
-If RicoFast helps you ship something, [star the repo](https://github.com/ricocc/ricoui-saas-template) — it's the simplest way to let me know.
 
 
-## Support the author
-
-If this template has been helpful, even a little support goes a long way in encouraging creators. Thank you!
-
-<a href="https://ko-fi.com/T6T817U4KZ" target="_blank"><img height="40" src="https://storage.ko-fi.com/cdn/kofi2.png?v=6" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
 
-<img src="public/rico/wechat-qr.jpg" alt="ricocc-wechat" width="280" />
 
 <br/>
 
