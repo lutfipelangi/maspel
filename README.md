@@ -31,7 +31,7 @@ If you are a developer and want to run this project locally:
    ```bash
    git clone https://github.com/lutfipelangi/maspel.git
 
-> [中文文档](README-zh.md) | English
+
 
 An open-source SaaS website template built with Astro 6 and Tailwind CSS v4. Designed for indie hackers, AI/dev-tool teams, and OSS maintainers who want a polished, design-forward product site.
 
@@ -77,18 +77,7 @@ An open-source SaaS website template built with Astro 6 and Tailwind CSS v4. Des
 - Node.js `>=22.12.0`
 - pnpm `>=9` (this repo uses `pnpm-lock.yaml` as the source of truth)
 
-## Quick start
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/ricocc/ricoui-saas-template.git my-saas
-cd my-saas
-
-# 2. Install dependencies
-pnpm install
-
-# 3. Start dev server (http://localhost:5200)
-pnpm dev
 ```
 
 ### Environment variables
