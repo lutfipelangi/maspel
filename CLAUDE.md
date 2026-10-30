@@ -4,7 +4,7 @@ This file gives AI coding assistants the working context and conventions needed 
 
 ## Project
 
-RicoFast is a static-first SaaS website template built with Astro, Tailwind CSS v4, MDX, and a reusable component system.
+Maspel is a static-first SaaS website template built with Astro, Tailwind CSS v4, MDX, and a reusable component system.
 
 It is a front-end template, not a full backend SaaS product. The project includes marketing pages, MDX blog/changelog content, demo pricing, demo auth screens, a demo contact form, SEO setup, dark mode, and a documented design system.
 

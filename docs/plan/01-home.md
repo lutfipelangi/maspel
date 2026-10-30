@@ -4,7 +4,7 @@ Source: `src/pages/index.astro`
 
 ## Purpose
 
-The home page introduces RicoFast as a complete SaaS website template and routes visitors toward the template repository, feature details, pricing examples, and content.
+The home page introduces Maspel as a complete SaaS website template and routes visitors toward the template repository, feature details, pricing examples, and content.
 
 ## Implemented Sections
 

@@ -1,4 +1,4 @@
-# Contributing to RicoFast
+# Contributing to Maspel
 
 Thanks for considering a contribution! All forms of help are welcome — bug reports, feature ideas, documentation improvements, or code.
 

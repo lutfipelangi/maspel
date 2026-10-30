@@ -1,8 +1,8 @@
-# RicoFast Project Overview
+# Maspel Project Overview
 
 > Last updated: 2026-05-30
 
-RicoFast is a static-first SaaS website template built with Astro, Tailwind CSS v4, MDX, and a reusable design system.
+Maspel is a static-first SaaS website template built with Astro, Tailwind CSS v4, MDX, and a reusable design system.
 
 ## Positioning
 

@@ -17,9 +17,9 @@ The blog uses the `post` collection. Posts are MDX files stored under `src/conte
 
 Current posts:
 
-- `introducing-ricofast`
+- `introducing-Maspel`
 - `customize-your-saas-site`
-- `design-system-behind-ricofast`
+- `design-system-behind-maspel`
 - `launching-v1-0`
 
 Required frontmatter:

@@ -1,16 +1,16 @@
 ---
-title: "The design system behind RicoFast"
+title: "The design system behind Maspel"
 description: "Tokens, type scale, dashed borders, and why we chose Instrument Serif. A look under the hood at the decisions that make the template feel coherent."
 publishDate: 2026-04-22
 read: 10
 tags: ["Design", "Deep dive"]
 img: "/assets/article-cover.jpg"
-img_alt: "Design tokens and typography in RicoFast"
+img_alt: "Design tokens and typography in Maspel"
 ---
 
 A template that looks good in the first screenshot is easy. A template that still looks good after you have replaced half the content is harder. That is the difference a design system makes.
 
-This post walks through the decisions behind RicoFast's design system: what we chose, what we rejected, and why.
+This post walks through the decisions behind Maspel design system: what we chose, what we rejected, and why.
 
 ## Type - two fonts, one job each
 
@@ -67,7 +67,7 @@ These numbers are not arbitrary. They create a rhythm that lets sections breathe
 
 ## Borders - dashed, primary-tinted
 
-Most templates default to solid neutral borders. RicoFast leans on dashed borders for dividers and quiet structure:
+Most templates default to solid neutral borders. Maspel leans on dashed borders for dividers and quiet structure:
 
 ```html
 <div class="w-full border-b border-dashed border-neutral-200"></div>
@@ -95,8 +95,8 @@ No section needs motion just because it looks empty. If motion does not explain 
 
 ## Why all of this matters
 
-A design system is a series of small constraints that make a template look intentional. When you fork RicoFast, replace the hero copy, swap the primary color, and add new sections, the system still holds because the underlying decisions about type pairing, spacing rhythm, and motion vocabulary are doing the heavy lifting.
+A design system is a series of small constraints that make a template look intentional. When you fork Maspel, replace the hero copy, swap the primary color, and add new sections, the system still holds because the underlying decisions about type pairing, spacing rhythm, and motion vocabulary are doing the heavy lifting.
 
 You do not have to be a designer to ship a designed product. You just have to avoid breaking the system.
 
-The full reference lives at [`docs/DESIGN.md`](https://github.com/ricocc/ricoui-saas-template/blob/main/docs/DESIGN.md). Read it once before your first major change; it is the cheat sheet for everything in the template.
+The full reference lives at [`docs/DESIGN.md`](https://github.com/lutfipelangi). Read it once before your first major change; it is the cheat sheet for everything in the template.

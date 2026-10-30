@@ -4,7 +4,7 @@ Source: `src/pages/elements.astro`
 
 ## Purpose
 
-The Elements page is the visual reference for RicoFast components and design tokens.
+The Elements page is the visual reference for Maspel components and design tokens.
 
 ## Implemented Areas
 

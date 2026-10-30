@@ -1,10 +1,10 @@
-# RicoFast PRD
+# Maspel PRD
 
-> This PRD describes the current implemented RicoFast project.
+> This PRD describes the current implemented Maspel project.
 
 ## Product Summary
 
-RicoFast is a design-led SaaS website template built with Astro, Tailwind CSS v4, MDX, and a reusable component system. It helps indie makers, AI tool teams, developer platform teams, and open-source maintainers launch a polished marketing site quickly.
+Maspel is a design-led SaaS website template built with Astro, Tailwind CSS v4, MDX, and a reusable component system. It helps indie makers, AI tool teams, developer platform teams, and open-source maintainers launch a polished marketing site quickly.
 
 The project is a static-first front-end template. It includes demo pricing, demo auth pages, demo contact behavior, MDX content, SEO setup, dark mode, and a documented design system.
 
@@ -12,15 +12,15 @@ The project is a static-first front-end template. It includes demo pricing, demo
 
 | Field | Current value |
 | --- | --- |
-| Product name | RicoFast |
+| Product name | Maspel |
 | Category | Astro SaaS website template |
 | Tagline | A design-led SaaS template for Astro |
 | Core promise | Ship a polished SaaS site in days, not weeks. |
 | Audience | Indie makers, AI/dev-tool teams, OSS maintainers |
 | Brand color | `#2d6dc3` |
 | Accent color | `#fad13b` |
-| Contact email | `hello@ricoui.com` |
-| Repository | `https://github.com/ricocc/ricoui-saas-template` |
+| Contact email | `hello@kiospelangi.com` |
+| Repository | `https://github.com/lutfipelangi` |
 
 ## Implemented Scope
 
@@ -107,7 +107,7 @@ Current footer groups:
 
 Source: `src/pages/index.astro`
 
-The home page presents RicoFast as a finished SaaS template. It includes:
+The home page presents Maspel as a finished SaaS template. It includes:
 
 - Hero section.
 - Social proof/logo strip.
@@ -220,9 +220,9 @@ featured: boolean
 
 Current posts:
 
-- `introducing-ricofast`
+- `introducing-maspel`
 - `customize-your-saas-site`
-- `design-system-behind-ricofast`
+- `design-system-behind-maspel`
 - `launching-v1-0`
 
 ### Changelog Entries

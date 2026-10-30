@@ -1,11 +1,11 @@
-# RicoFast Design System
+# Maspel Design System
 
 
-This document describes the current visual system implemented in the RicoFast project.
+This document describes the current visual system implemented in the Maspel project.
 
 ## Design Direction
 
-RicoFast uses a calm SaaS/product-site aesthetic:
+Maspel uses a calm SaaS/product-site aesthetic:
 
 - Warm light canvas.
 - Blue primary accent.
@@ -189,6 +189,6 @@ Current asset groups:
 - `public/assets/stack/*`
 - `public/assets/blog/cover.jpg`
 - `public/assets/article-cover.jpg`
-- `public/rico/*`
+- `public/maspel/*`
 
-Replace these when adapting RicoFast to a real product.
+Replace these when adapting Maspel to a real product.

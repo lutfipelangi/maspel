@@ -7,7 +7,7 @@ Sources:
 
 ## About Page
 
-The about page explains RicoFast as a template project, not a backend SaaS company. It covers:
+The about page explains Maspel as a template project, not a backend SaaS company. It covers:
 
 - Why the template exists.
 - Who it is for.

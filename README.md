@@ -143,7 +143,7 @@ Auth pages also include centered-card variants at `/signin` and `/signup`.
 
 ## Customization
 
-The first 90% of customization happens in three places. There's a full walkthrough at [/blog/customize-your-saas-site](https://ricofast.pages.dev/blog/customize-your-saas-site).
+The first 90% of customization happens in three places. There's a full walkthrough at [/blog/customize-your-saas-site](https://maspel.my.id).
 
 ### 1. Brand identity — `src/config/site.js`
 
