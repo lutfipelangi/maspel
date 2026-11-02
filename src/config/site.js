@@ -21,8 +21,8 @@ export const siteConfig = {
 	},
 	// social links
 	social:{
-		twitter: "http://x.com/mahapat/",
-		twitterName: "MASPEL",
+		twitter: "http://instagram.com/lutfipelangi",
+		twitterName: "lutfipelangi",
 		github: "https://github.com/lutfipelangi",
 		blog: "https://kiosy.my.id",
 	},
