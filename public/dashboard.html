@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PEGASUS — Command Control Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              950: '#070B16',
+              900: '#0B1120',
+              850: '#0F172A',
+              800: '#131C31',
+              750: '#18233D',
+              700: '#1E293B',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom subtle dark scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B1120;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E293B;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-[#0B1120] text-[#F8FAFC] font-sans antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-30 hidden lg:hidden transition-opacity"></div>
+
+  <div class="min-h-screen flex">
+    <!-- ========================================== -->
+    <!-- LEFT SIDEBAR                               -->
+    <!-- ========================================== -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 h-screen w-64 bg-[#0D1426] border-r border-[#1E293B] flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+      
+      <!-- Top Brand & Navigation -->
+      <div class="flex flex-col flex-1 overflow-y-auto">
+        <!-- Brand Header -->
+        <div class="px-5 py-5 flex items-center justify-between border-b border-[#1E293B]/70">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/25 ring-1 ring-blue-400/30">
+              <!-- Wing / Pegasus SVG emblem -->
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+                <line x1="16" y1="8" x2="2" y2="22"></line>
+                <line x1="17.5" y1="15" x2="9" y2="15"></line>
+              </svg>
+            </div>
+            <div>
+              <div class="text-sm font-extrabold tracking-wider text-white leading-tight">PEGASUS</div>
+              <div class="text-[10px] font-semibold tracking-[0.16em] text-[#94A3B8] uppercase">COMMAND CONTROL</div>
+            </div>
+          </div>
+          <button id="close-sidebar-btn" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Sidebar Menu List -->
+        <nav class="px-3 py-4 space-y-6 flex-1">
+          <!-- Group: PEMANTAUAN -->
+          <div>
+            <div class="px-3 mb-2 text-[10px] font-bold tracking-[0.14em] text-[#64748B] uppercase">
+              PEMANTAUAN
+            </div>
+            <ul class="space-y-1" id="nav-pemantauan">
+              <li>
+                <button data-nav="Ringkasan" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    <span>Ringkasan</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Lokasi" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    <span>Lokasi</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Chat & DM" class="nav-item active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white shadow-md shadow-blue-600/20 transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                    <span>Chat & DM</span>
+                  </span>
+                  <span id="sidebar-chat-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-white/20 text-white">
+                    400
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="SMS" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                    <span>SMS</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Kontak" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>Kontak</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Panggilan" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                    <span>Panggilan</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Galeri" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="image" class="w-4 h-4"></i>
+                    <span>Galeri</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Kamera" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="camera" class="w-4 h-4"></i>
+                    <span>Kamera</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Mikrofon" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="mic" class="w-4 h-4"></i>
+                    <span>Mikrofon</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Pemakaian Aplikasi" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="layers" class="w-4 h-4"></i>
+                    <span>Pemakaian Aplikasi</span>
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Group: KEAMANAN -->
+          <div>
+            <div class="px-3 mb-2 text-[10px] font-bold tracking-[0.14em] text-[#64748B] uppercase">
+              KEAMANAN
+            </div>
+            <ul class="space-y-1">
+              <li>
+                <button data-nav="Log Audit" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    <span>Log Audit</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button data-nav="Kata Kunci" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-[#131C31] transition-all">
+                  <span class="flex items-center gap-3">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                    <span>Kata Kunci</span>
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Bottom User Footer Card -->
+      <div class="p-3 border-t border-[#1E293B]">
+        <div class="bg-[#131C31] border border-[#1E293B] rounded-xl p-2.5 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
+              A
+            </div>
+            <div class="min-w-0">
+              <div class="text-xs font-semibold text-white truncate">Administrator PEG...</div>
+              <div class="text-[10px] text-[#94A3B8] truncate">Administrator</div>
+            </div>
+          </div>
+          <button id="logout-btn" class="px-2.5 py-1.5 rounded-lg bg-[#1E293B] hover:bg-slate-700 text-[11px] font-medium text-slate-300 hover:text-white border border-slate-700/70 transition-colors shrink-0">
+            Keluar
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- MAIN WORKSPACE AREA                        -->
+    <!-- ========================================== -->
+    <div class="flex-1 flex flex-col min-w-0">
+      
+      <!-- Top Header Bar -->
+      <header class="sticky top-0 z-20 bg-[#0B1120]/90 backdrop-blur-md border-b border-[#1E293B] px-4 sm:px-6 lg:px-8 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          
+          <!-- Left: Mobile Toggle + Page Title -->
+          <div class="flex items-start sm:items-center gap-3">
+            <button id="open-sidebar-btn" class="lg:hidden mt-0.5 sm:mt-0 p-2 rounded-xl bg-[#131C31] border border-[#1E293B] text-slate-300 hover:text-white">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <div>
+              <h1 id="header-page-title" class="text-lg sm:text-xl font-bold text-white tracking-tight">Chat &amp; DM</h1>
+              <p class="text-xs text-[#94A3B8] mt-0.5">
+                Pesan dari WhatsApp, Telegram, Signal, dan media sosial - diperbarui <span id="last-updated-time" class="text-slate-300 font-medium">11.40.13</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Right: Refresh Interval Dropdown + "+ Perangkat" Button -->
+          <div class="flex items-center gap-2.5 self-start sm:self-auto">
+            <!-- Refresh Interval Pill -->
+            <div class="relative">
+              <button id="interval-btn" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#131C31] hover:bg-[#18233D] border border-[#1E293B] text-xs font-medium text-slate-200 transition-colors">
+                <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+                <span id="interval-label">1 menit</span>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
+              </button>
+              <div id="interval-menu" class="hidden absolute right-0 mt-1.5 w-36 bg-[#131C31] border border-[#334155] rounded-xl shadow-xl py-1 z-30">
+                <button data-interval="30 detik" class="interval-opt w-full text-left px-3.5 py-2 text-xs text-slate-300 hover:bg-[#1E293B] hover:text-white">30 detik</button>
+                <button data-interval="1 menit" class="interval-opt w-full text-left px-3.5 py-2 text-xs text-white font-semibold bg-blue-600/20">1 menit</button>
+                <button data-interval="5 menit" class="interval-opt w-full text-left px-3.5 py-2 text-xs text-slate-300 hover:bg-[#1E293B] hover:text-white">5 menit</button>
+                <button data-interval="Manual" class="interval-opt w-full text-left px-3.5 py-2 text-xs text-slate-300 hover:bg-[#1E293B] hover:text-white">Manual</button>
+              </div>
+            </div>
+
+            <!-- + Perangkat Primary Button -->
+            <button id="open-device-modal-btn" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-lg shadow-blue-600/25 transition-all active:scale-95">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>Perangkat</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <main class="flex-1 px-4 sm:px-6 lg:px-8 py-6">
+        <div class="max-w-7xl mx-auto space-y-6">
+
+          <!-- Notification Banner for Non-Chat Views (Hidden by default) -->
+          <div id="module-notice" class="hidden bg-[#131C31] border border-blue-500/30 rounded-2xl p-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-white">Modul <span id="notice-module-name">Ringkasan</span> Aktif</div>
+                <div class="text-[11px] text-[#94A3B8]">Menampilkan telemetri perangkat terhubung untuk profil <span class="text-blue-400 font-medium" id="notice-device-name">Raka</span>.</div>
+              </div>
+            </div>
+            <button id="back-to-chat-btn" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors">
+              Kembali ke Chat &amp; DM
+            </button>
+          </div>
+
+          <!-- 1. Device / Profile Selector Bar -->
+          <div id="device-selector-bar" class="flex flex-wrap items-center gap-3">
+            <!-- Device Chips injected via JS -->
+          </div>
+
+          <!-- 2. Platform Summary Cards Grid (3 columns on desktop) -->
+          <section aria-label="Ringkasan Platform">
+            <div id="platform-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Cards rendered by JS -->
+            </div>
+          </section>
+
+          <!-- 3. Bottom Feed Panel ("Semua Pesan") -->
+          <section class="bg-[#131C31] border border-[#1E293B] rounded-2xl overflow-hidden shadow-xl">
+            <!-- Feed Header & Filter Controls -->
+            <div class="px-5 py-4 border-b border-[#1E293B] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <h2 class="text-sm font-bold text-white">Semua Pesan</h2>
+                <span id="active-filter-tag" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-600/20 text-blue-400 border border-blue-500/30">
+                  Filter: WhatsApp
+                </span>
+                <span id="message-count-pill" class="text-[11px] text-[#94A3B8] font-medium">
+                  (0 pesan)
+                </span>
+              </div>
+
+              <!-- Direction Filter Pills -->
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button data-dir="Semua" class="dir-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#2563EB] text-white transition-colors">
+                  Semua
+                </button>
+                <button data-dir="Masuk" class="dir-btn px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#0F172A] text-[#94A3B8] hover:text-white border border-[#1E293B] transition-colors">
+                  Masuk
+                </button>
+                <button data-dir="Keluar" class="dir-btn px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#0F172A] text-[#94A3B8] hover:text-white border border-[#1E293B] transition-colors">
+                  Keluar
+                </button>
+                <button id="reset-filters-btn" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#0F172A] text-[#94A3B8] hover:text-white hover:border-slate-600 border border-[#1E293B] transition-colors">
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Message Rows Container -->
+            <div id="messages-list" class="divide-y divide-[#1E293B]/80">
+              <!-- Message rows injected via JS -->
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: TAMBAH PERANGKAT BARU               -->
+  <!-- ========================================== -->
+  <div id="device-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+    <div class="bg-[#131C31] border border-[#334155] rounded-2xl w-full max-w-md p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Tambah Perangkat Baru</h3>
+        </div>
+        <button id="close-device-modal" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="add-device-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1.5">Nama Profil / Target</label>
+          <input type="text" id="new-device-name" required placeholder="Contoh: Dimas Pratama" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0B1120] border border-[#1E293B] focus:border-blue-500 focus:outline-none text-xs text-white placeholder-slate-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1.5">Model Perangkat</label>
+          <input type="text" id="new-device-model" required placeholder="Contoh: Samsung Galaxy S24 Ultra" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0B1120] border border-[#1E293B] focus:border-blue-500 focus:outline-none text-xs text-white placeholder-slate-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1.5">Status Sinkronisasi</label>
+          <select id="new-device-status" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0B1120] border border-[#1E293B] focus:border-blue-500 focus:outline-none text-xs text-white">
+            <option value="Aktif">Aktif (Real-time)</option>
+            <option value="Siaga">Siaga (Hemat Daya)</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5">
+          <button type="button" id="cancel-device-modal" class="px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-slate-700 text-xs font-medium text-slate-300">
+            Batal
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-xs font-semibold text-white shadow-lg shadow-blue-600/25">
+            Hubungkan Perangkat
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: DETAIL PESAN                        -->
+  <!-- ========================================== -->
+  <div id="message-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+    <div class="bg-[#131C31] border border-[#334155] rounded-2xl w-full max-w-lg p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div class="flex items-center gap-3">
+          <div id="modal-msg-avatar" class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white">
+            T
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="modal-msg-sender" class="text-sm font-bold text-white">Target (terkirim)</h3>
+              <span id="modal-msg-platform" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300">WhatsApp</span>
+            </div>
+            <p id="modal-msg-meta" class="text-[11px] text-[#94A3B8] mt-0.5">17 Nov, 11.13 · Keluar</p>
+          </div>
+        </div>
+        <button id="close-message-modal" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="bg-[#0B1120] border border-[#1E293B] rounded-xl p-4 text-xs text-slate-200 leading-relaxed mb-4" id="modal-msg-body">
+        Isi pesan lengkap akan tampil di sini.
+      </div>
+
+      <div class="flex items-center justify-between text-[11px] text-[#94A3B8]">
+        <span>Perangkat: <strong class="text-slate-200" id="modal-msg-device">Raka</strong></span>
+        <button id="close-message-modal-btn" class="px-4 py-2 rounded-xl bg-[#1E293B] hover:bg-slate-700 text-xs font-semibold text-white">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-[#1E293B] border border-blue-500/40 text-xs font-medium text-white shadow-2xl">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toast-text">Pembaruan selesai</span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- APPLICATION LOGIC                          -->
+  <!-- ========================================== -->
+  <script>
+    // 1. State Data
+    const state = {
+      activeNav: 'Chat & DM',
+      selectedDeviceId: 'raka',
+      selectedPlatform: null, // null = all platforms
+      selectedDirection: 'Semua', // 'Semua' | 'Masuk' | 'Keluar'
+      devices: [
+        { id: 'raka', name: 'Raka', initial: 'R', status: 'Aktif', model: 'Pixel 8 Pro', unreadTotal: 400 }
+      ],
+      platforms: [
+        {
+          id: 'WhatsApp',
+          name: 'WhatsApp',
+          stats: '118 pesan · 5 media',
+          time: '26 mnt lalu',
+          preview: 'Saya: Kontak',
+          iconBg: 'bg-[#22C55E]',
+          iconName: 'message-circle',
+          active: true
+        },
+        {
+          id: 'Google Messages',
+          name: 'Google Messages',
+          stats: '7 pesan',
+          time: '1 jam lalu',
+          preview: 'IM3-Adobe: Anda belum melakukan aktivasi layanan Ad...',
+          iconBg: 'bg-[#2563EB]',
+          iconName: 'message-square-text',
+          active: true
+        },
+        {
+          id: 'X',
+          name: 'X',
+          stats: '1 pesan · 1 media',
+          time: '3 jam lalu',
+          preview: 'TURKI ALALSHIKH: Sayangku dan anakku, saya berko...',
+          iconBg: 'bg-[#3B82F6]',
+          iconName: 'at-sign',
+          active: true
+        },
+        {
+          id: 'Instagram',
+          name: 'Instagram',
+          stats: '326 pesan',
+          time: '9 jam lalu',
+          preview: 'Foto 1 dari 2 oleh detikHOT, 5.482 suka, 324 komentar',
+          iconBg: 'bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600',
+          iconName: 'instagram',
+          active: true
+        },
+        {
+          id: 'Telegram',
+          name: 'Telegram',
+          stats: '3 pesan',
+          time: '12 jam lalu',
+          preview: 'Pratama Persadha: Diskusi keamanan jaringan hari ini',
+          iconBg: 'bg-[#0EA5E9]',
+          iconName: 'send',
+          active: true
+        },
+        {
+          id: 'Signal',
+          name: 'Signal',
+          stats: 'belum ada pesan',
+          time: '',
+          preview: 'Ikon membaca: aktifkan izin Notifikasi & Baca Chat',
+          iconBg: 'bg-[#1D4ED8]/30 border border-blue-500/40 text-blue-400',
+          iconName: 'alert-circle',
+          active: false
+        },
+        {
+          id: 'Messenger',
+          name: 'Messenger',
+          stats: 'belum ada pesan',
+          time: '',
+          preview: 'Ikon membaca: aktifkan izin Notifikasi & Baca Chat',
+          iconBg: 'bg-[#2563EB]',
+          iconName: 'messages-square',
+          active: false
+        }
+      ],
+      messages: [
+        {
+          id: 1,
+          deviceId: 'raka',
+          sender: 'Target (terkirim)',
+          initial: 'T',
+          avatarColor: 'bg-amber-600/30 text-amber-300 border border-amber-500/30',
+          platform: 'WhatsApp',
+          badgeClass: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
+          snippet: 'Kontak',
+          fullText: 'Kontak — Kartu kontak vCard telah dikirimkan ke nomor tujuan melalui sesi WhatsApp utama.',
+          direction: 'Keluar',
+          timestamp: '17 Nov, 11.13'
+        },
+        {
+          id: 2,
+          deviceId: 'raka',
+          sender: 'Keypad',
+          initial: 'WA',
+          avatarColor: 'bg-blue-600/30 text-blue-300 border border-blue-500/30',
+          platform: 'WhatsApp',
+          badgeClass: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+          snippet: 'Siap koordinasi pukul 14.00 WIB di ruang rapat utama.',
+          fullText: 'Siap koordinasi pukul 14.00 WIB di ruang rapat utama. Dokumen laporan bulanan sudah dilampirkan.',
+          direction: 'Masuk',
+          timestamp: '17 Nov, 11.13'
+        },
+        {
+          id: 3,
+          deviceId: 'raka',
+          sender: 'IM3-Adobe',
+          initial: 'IM',
+          avatarColor: 'bg-sky-600/30 text-sky-300 border border-sky-500/30',
+          platform: 'Google Messages',
+          badgeClass: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+          snippet: 'Anda belum melakukan aktivasi layanan Adobe Creative Cloud bulan ini.',
+          fullText: 'IM3-Adobe: Anda belum melakukan aktivasi layanan Adobe Creative Cloud bulan ini. Klik tautan resmi operator untuk verifikasi paket.',
+          direction: 'Masuk',
+          timestamp: '17 Nov, 10.40'
+        },
+        {
+          id: 4,
+          deviceId: 'raka',
+          sender: 'Pratama Persadha',
+          initial: 'PP',
+          avatarColor: 'bg-cyan-600/30 text-cyan-300 border border-cyan-500/30',
+          platform: 'Telegram',
+          badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-500/30',
+          snippet: 'Diskusi keamanan jaringan hari ini dijadwalkan ulang sore nanti.',
+          fullText: 'Pratama Persadha: Diskusi keamanan jaringan hari ini dijadwalkan ulang sore nanti pukul 16.00 WIB via kanal terenkripsi.',
+          direction: 'Masuk',
+          timestamp: '17 Nov, 09.15'
+        },
+        {
+          id: 5,
+          deviceId: 'raka',
+          sender: 'detikHOT',
+          initial: 'DH',
+          avatarColor: 'bg-pink-600/30 text-pink-300 border border-pink-500/30',
+          platform: 'Instagram',
+          badgeClass: 'bg-pink-500/20 text-pink-300 border border-pink-500/30',
+          snippet: 'Foto 1 dari 2 oleh detikHOT, 5.482 suka, 324 komentar',
+          fullText: 'Notifikasi Direct Message & Interaksi: Foto 1 dari 2 oleh detikHOT, 5.482 suka, 324 komentar dibagikan ke dalam obrolan.',
+          direction: 'Masuk',
+          timestamp: '17 Nov, 08.22'
+        },
+        {
+          id: 6,
+          deviceId: 'raka',
+          sender: 'TURKI ALALSHIKH',
+          initial: 'TA',
+          avatarColor: 'bg-indigo-600/30 text-indigo-300 border border-indigo-500/30',
+          platform: 'X',
+          badgeClass: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30',
+          snippet: 'Sayangku dan anakku, saya berkomitmen mendukung penuh acara malam ini.',
+          fullText: 'TURKI ALALSHIKH: Sayangku dan anakku, saya berkomitmen mendukung penuh acara malam ini bersama seluruh tim penyelenggara.',
+          direction: 'Masuk',
+          timestamp: '17 Nov, 08.05'
+        }
+      ]
+    };
+
+    // 2. Helper: Show Toast
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      toastText.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2600);
+    }
+
+    // 3. Render Device Selector Chips
+    function renderDevices() {
+      const container = document.getElementById('device-selector-bar');
+      container.innerHTML = state.devices.map(dev => {
+        const isSelected = dev.id === state.selectedDeviceId;
+        return `
+          <button
+            data-device-id="${dev.id}"
+            class="device-chip inline-flex items-center gap-3 px-3.5 py-2 rounded-2xl border transition-all ${
+              isSelected
+                ? 'bg-[#131C31] border-blue-500 ring-2 ring-blue-500/20 shadow-lg shadow-blue-950/50'
+                : 'bg-[#131C31]/60 border-[#1E293B] hover:border-slate-600'
+            }"
+          >
+            <div class="w-8 h-8 rounded-full bg-[#2563EB] flex items-center justify-center text-xs font-bold text-white shadow-inner">
+              ${dev.initial}
+            </div>
+            <div class="text-left pr-1">
+              <div class="text-xs font-bold text-white leading-tight">${dev.name}</div>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="w-1.5 h-1.5 rounded-full ${dev.status === 'Aktif' ? 'bg-[#10B981]' : 'bg-amber-400'}"></span>
+                <span class="text-[11px] font-medium ${dev.status === 'Aktif' ? 'text-[#10B981]' : 'text-amber-300'}">${dev.status}</span>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.device-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedDeviceId = btn.dataset.deviceId;
+          const activeDev = state.devices.find(d => d.id === state.selectedDeviceId);
+          document.getElementById('sidebar-chat-badge').textContent = activeDev ? activeDev.unreadTotal : '0';
+          document.getElementById('notice-device-name').textContent = activeDev ? activeDev.name : 'Perangkat';
+          renderDevices();
+          renderMessages();
+        });
+      });
+    }
+
+    // 4. Render Platform Summary Cards
+    function renderPlatformCards() {
+      const grid = document.getElementById('platform-cards-grid');
+      grid.innerHTML = state.platforms.map(p => {
+        const isSelected = state.selectedPlatform === p.id;
+        return `
+          <div
+            data-platform="${p.id}"
+            class="platform-card cursor-pointer rounded-2xl p-4 bg-[#131C31] hover:bg-[#162038] border transition-all flex flex-col justify-between min-h-[118px] ${
+              isSelected
+                ? 'border-blue-500 ring-2 ring-blue-500/25 shadow-lg shadow-blue-950/50'
+                : 'border-[#1E293B] hover:border-slate-700'
+            }"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl ${p.iconBg} flex items-center justify-center text-white shrink-0 shadow-md">
+                  <i data-lucide="${p.iconName}" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-white leading-tight">${p.name}</h3>
+                  <p class="text-[11px] text-[#94A3B8] mt-0.5">${p.stats}</p>
+                </div>
+              </div>
+              ${p.time ? `<span class="text-[11px] text-[#64748B] font-medium shrink-0">${p.time}</span>` : ''}
+            </div>
+
+            <p class="text-xs ${p.active ? 'text-slate-300' : 'text-[#64748B]'} truncate mt-4">
+              ${p.preview}
+            </p>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+
+      document.querySelectorAll('.platform-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const clickedPlatform = card.dataset.platform;
+          state.selectedPlatform = (state.selectedPlatform === clickedPlatform) ? null : clickedPlatform;
+          renderPlatformCards();
+          renderMessages();
+        });
+      });
+    }
+
+    // 5. Render Messages List
+    function renderMessages() {
+      const listEl = document.getElementById('messages-list');
+      const filterTag = document.getElementById('active-filter-tag');
+      const countPill = document.getElementById('message-count-pill');
+
+      if (state.selectedPlatform) {
+        filterTag.textContent = `Platform: ${state.selectedPlatform}`;
+        filterTag.classList.remove('hidden');
+      } else {
+        filterTag.classList.add('hidden');
+      }
+
+      const filtered = state.messages.filter(m => {
+        const matchDevice = m.deviceId === state.selectedDeviceId;
+        const matchPlatform = !state.selectedPlatform || m.platform === state.selectedPlatform;
+        const matchDir = state.selectedDirection === 'Semua' || m.direction === state.selectedDirection;
+        return matchDevice && matchPlatform && matchDir;
+      });
+
+      countPill.textContent = `(${filtered.length} pesan)`;
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="px-6 py-12 text-center">
+            <div class="w-11 h-11 rounded-2xl bg-[#0F172A] border border-[#1E293B] text-slate-400 flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="inbox" class="w-5 h-5"></i>
+            </div>
+            <p class="text-xs font-semibold text-slate-300">Belum ada pesan pada filter ini</p>
+            <p class="text-[11px] text-[#64748B] mt-1">Klik tombol Reset atau pilih kartu platform lainnya untuk melihat log pesan.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(msg => `
+        <div
+          data-msg-id="${msg.id}"
+          class="message-row cursor-pointer px-5 py-3.5 hover:bg-[#18233D]/70 transition-colors flex items-center justify-between gap-4"
+        >
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-9 h-9 rounded-full ${msg.avatarColor} flex items-center justify-center text-xs font-bold shrink-0">
+              ${msg.initial}
+            </div>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold text-white truncate">${msg.sender}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${msg.badgeClass}">
+                  ${msg.platform}
+                </span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#0B1120] text-[#94A3B8] border border-[#1E293B]">
+                  ${msg.direction}
+                </span>
+              </div>
+              <p class="text-xs text-[#94A3B8] truncate mt-0.5">${msg.snippet}</p>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-[#64748B] font-medium shrink-0">
+            ${msg.timestamp}
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+
+      // Open Message Detail Modal on click
+      document.querySelectorAll('.message-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const msgId = Number(row.dataset.msgId);
+          const item = state.messages.find(m => m.id === msgId);
+          if (!item) return;
+
+          const activeDev = state.devices.find(d => d.id === item.deviceId);
+          document.getElementById('modal-msg-avatar').textContent = item.initial;
+          document.getElementById('modal-msg-sender').textContent = item.sender;
+          document.getElementById('modal-msg-platform').textContent = item.platform;
+          document.getElementById('modal-msg-meta').textContent = `${item.timestamp} · Arah: ${item.direction}`;
+          document.getElementById('modal-msg-body').textContent = item.fullText;
+          document.getElementById('modal-msg-device').textContent = activeDev ? activeDev.name : 'Raka';
+
+          const modal = document.getElementById('message-modal');
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        });
+      });
+    }
+
+    // 6. Event Listeners Setup
+    function setupEvents() {
+      // Mobile Sidebar Toggle
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+
+      function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      }
+      function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+
+      document.getElementById('open-sidebar-btn').addEventListener('click', openSidebar);
+      document.getElementById('close-sidebar-btn').addEventListener('click', closeSidebar);
+      backdrop.addEventListener('click', closeSidebar);
+
+      // Sidebar Navigation Items
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const navName = btn.dataset.nav;
+          state.activeNav = navName;
+
+          document.querySelectorAll('.nav-item').forEach(el => {
+            el.classList.remove('active', 'bg-gradient-to-r', 'from-[#2563EB]', 'to-[#1D4ED8]', 'text-white', 'font-semibold', 'shadow-md', 'shadow-blue-600/20');
+            el.classList.add('text-[#94A3B8]', 'font-medium');
+          });
+
+          btn.classList.add('active', 'bg-gradient-to-r', 'from-[#2563EB]', 'to-[#1D4ED8]', 'text-white', 'font-semibold', 'shadow-md', 'shadow-blue-600/20');
+          btn.classList.remove('text-[#94A3B8]', 'font-medium');
+
+          document.getElementById('header-page-title').textContent = navName;
+
+          const notice = document.getElementById('module-notice');
+          if (navName !== 'Chat & DM') {
+            document.getElementById('notice-module-name').textContent = navName;
+            notice.classList.remove('hidden');
+          } else {
+            notice.classList.add('hidden');
+          }
+
+          closeSidebar();
+        });
+      });
+
+      document.getElementById('back-to-chat-btn').addEventListener('click', () => {
+        const chatBtn = document.querySelector('.nav-item[data-nav="Chat & DM"]');
+        if (chatBtn) chatBtn.click();
+      });
+
+      // Direction Filters (Semua, Masuk, Keluar)
+      document.querySelectorAll('.dir-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedDirection = btn.dataset.dir;
+          document.querySelectorAll('.dir-btn').forEach(b => {
+            b.classList.remove('active', 'bg-[#2563EB]', 'text-white', 'font-semibold');
+            b.classList.add('bg-[#0F172A]', 'text-[#94A3B8]', 'font-medium');
+          });
+          btn.classList.add('active', 'bg-[#2563EB]', 'text-white', 'font-semibold');
+          btn.classList.remove('bg-[#0F172A]', 'text-[#94A3B8]', 'font-medium');
+          renderMessages();
+        });
+      });
+
+      // Reset Filters
+      document.getElementById('reset-filters-btn').addEventListener('click', () => {
+        state.selectedPlatform = null;
+        state.selectedDirection = 'Semua';
+
+        document.querySelectorAll('.dir-btn').forEach(b => {
+          b.classList.remove('active', 'bg-[#2563EB]', 'text-white', 'font-semibold');
+          b.classList.add('bg-[#0F172A]', 'text-[#94A3B8]', 'font-medium');
+        });
+        const allBtn = document.querySelector('.dir-btn[data-dir="Semua"]');
+        allBtn.classList.add('active', 'bg-[#2563EB]', 'text-white', 'font-semibold');
+        allBtn.classList.remove('bg-[#0F172A]', 'text-[#94A3B8]', 'font-medium');
+
+        renderPlatformCards();
+        renderMessages();
+        showToast('Filter pesan direset');
+      });
+
+      // Refresh Interval Dropdown
+      const intervalBtn = document.getElementById('interval-btn');
+      const intervalMenu = document.getElementById('interval-menu');
+      intervalBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        intervalMenu.classList.toggle('hidden');
+      });
+      document.addEventListener('click', () => intervalMenu.classList.add('hidden'));
+
+      document.querySelectorAll('.interval-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.getElementById('interval-label').textContent = opt.dataset.interval;
+          const now = new Date();
+          const pad = n => String(n).padStart(2, '0');
+          document.getElementById('last-updated-time').textContent = `${pad(now.getHours())}.${pad(now.getMinutes())}.${pad(now.getSeconds())}`;
+          showToast(`Interval sinkronisasi: ${opt.dataset.interval}`);
+        });
+      });
+
+      // Add Device Modal
+      const deviceModal = document.getElementById('device-modal');
+      const openDeviceModal = () => {
+        deviceModal.classList.remove('hidden');
+        deviceModal.classList.add('flex');
+      };
+      const closeDeviceModal = () => {
+        deviceModal.classList.add('hidden');
+        deviceModal.classList.remove('flex');
+      };
+
+      document.getElementById('open-device-modal-btn').addEventListener('click', openDeviceModal);
+      document.getElementById('close-device-modal').addEventListener('click', closeDeviceModal);
+      document.getElementById('cancel-device-modal').addEventListener('click', closeDeviceModal);
+
+      document.getElementById('add-device-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('new-device-name').value.trim();
+        const modelInput = document.getElementById('new-device-model').value.trim();
+        const statusInput = document.getElementById('new-device-status').value;
+
+        if (!nameInput) return;
+
+        const newId = nameInput.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now();
+        state.devices.push({
+          id: newId,
+          name: nameInput,
+          initial: nameInput.charAt(0).toUpperCase(),
+          status: statusInput,
+          model: modelInput,
+          unreadTotal: 12
+        });
+
+        // Add sample message for the newly added device
+        state.messages.unshift({
+          id: Date.now(),
+          deviceId: newId,
+          sender: `${nameInput} (Sistem)`,
+          initial: nameInput.charAt(0).toUpperCase(),
+          avatarColor: 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/30',
+          platform: 'WhatsApp',
+          badgeClass: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
+          snippet: `Perangkat ${modelInput} berhasil terhubung ke Command Control.`,
+          fullText: `Sinkronisasi awal selesai untuk profil ${nameInput} (${modelInput}). Seluruh kanal pesan siap dipantau.`,
+          direction: 'Masuk',
+          timestamp: 'Baru saja'
+        });
+
+        state.selectedDeviceId = newId;
+        document.getElementById('sidebar-chat-badge').textContent = '12';
+        document.getElementById('add-device-form').reset();
+        closeDeviceModal();
+        renderDevices();
+        renderMessages();
+        showToast(`Perangkat "${nameInput}" berhasil ditambahkan`);
+      });
+
+      // Close Message Modal
+      const msgModal = document.getElementById('message-modal');
+      const closeMsgModal = () => {
+        msgModal.classList.add('hidden');
+        msgModal.classList.remove('flex');
+      };
+      document.getElementById('close-message-modal').addEventListener('click', closeMsgModal);
+      document.getElementById('close-message-modal-btn').addEventListener('click', closeMsgModal);
+
+      // Logout button feedback
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        showToast('Sesi Administrator terkunci');
+      });
+    }
+
+    // Initialize Dashboard
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDevices();
+      renderPlatformCards();
+      renderMessages();
+      setupEvents();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
